@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>THE COLOR LAB 情緒色彩測驗</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="THE COLOR LAB 色彩情緒研究所｜今天的你是什麼顏色？10 題、約 2 分鐘，找到你的情緒代表色，預約並領取情緒通行證。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;600;700&display=swap">
+<style>
+/* Layout: one narrow "lab notebook" column (max 720px) over a soft watercolor aura in the four theme colours, taken from the event poster. */
+:root{
+  --paper:#FBF6EE; --paper-2:#F4ECDF; --ink:#2B2533; --ink-soft:#6A6072; --line:#E3D8C8;
+  --card:#FFFDF9; --gold:#A7834A;
+  --blue:#3E6DB5; --yellow:#E2A23B; --red:#D2564B; --purple:#8559B3;
+  --blue-soft:#DDE7F6; --yellow-soft:#FBEBCB; --red-soft:#F8DDD8; --purple-soft:#EADFF5;
+  --aura-o:.55;
+  --f-display:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --f-latin:"Cormorant Garamond","Times New Roman",serif;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --r:18px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#16131D; --paper-2:#1E1A28; --ink:#F1EAF6; --ink-soft:#B4A9BE; --line:#3A3346; --card:#211C2B; --gold:#D4B37A;
+  --blue:#7FA5E6; --yellow:#F0BE62; --red:#EE7F72; --purple:#B48BE3;
+  --blue-soft:#22314A; --yellow-soft:#3E3220; --red-soft:#43242A; --purple-soft:#33264A; --aura-o:.32; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#16131D; --paper-2:#1E1A28; --ink:#F1EAF6; --ink-soft:#B4A9BE; --line:#3A3346; --card:#211C2B; --gold:#D4B37A;
+  --blue:#7FA5E6; --yellow:#F0BE62; --red:#EE7F72; --purple:#B48BE3;
+  --blue-soft:#22314A; --yellow-soft:#3E3220; --red-soft:#43242A; --purple-soft:#33264A; --aura-o:.32; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.75;margin:0;overflow-x:hidden}
+.aura{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.aura i{position:absolute;border-radius:50%;filter:blur(60px);opacity:var(--aura-o)}
+.aura i:nth-child(1){width:60vmax;height:60vmax;left:-25vmax;top:-20vmax;background:var(--blue)}
+.aura i:nth-child(2){width:45vmax;height:45vmax;right:-18vmax;top:-10vmax;background:var(--yellow)}
+.aura i:nth-child(3){width:50vmax;height:50vmax;right:-22vmax;bottom:-25vmax;background:var(--red)}
+.aura i:nth-child(4){width:55vmax;height:55vmax;left:-20vmax;bottom:-30vmax;background:var(--purple)}
+body[data-tone] .aura i{opacity:calc(var(--aura-o)*.45);transition:opacity .8s}
+body[data-tone] .aura i.on{opacity:calc(var(--aura-o)*1.4)}
+@media (prefers-reduced-motion:no-preference){.aura i{animation:drift 22s ease-in-out infinite alternate}.aura i:nth-child(2){animation-delay:-6s}.aura i:nth-child(3){animation-delay:-11s}.aura i:nth-child(4){animation-delay:-16s}}
+@keyframes drift{to{transform:translate(4vmax,3vmax) scale(1.08)}}
+
+.wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 56px}
+header.top{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px;color:var(--ink-soft);letter-spacing:.08em}
+header.top b{font-family:var(--f-display);font-weight:600;color:var(--ink);letter-spacing:.15em}
+.view{display:grid;gap:28px;padding-top:28px}
+[hidden],.view[hidden]{display:none!important}
+
+/* type */
+.eyebrow{font-family:var(--f-latin);font-style:italic;font-size:19px;color:var(--gold);letter-spacing:.02em}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;font-weight:600}
+.brand{font-family:var(--f-latin);font-weight:600;font-size:clamp(46px,13vw,84px);line-height:.95;letter-spacing:.02em;margin:0}
+.brand small{display:block;font-size:.34em;letter-spacing:.35em;font-weight:500}
+.brand-zh{font-family:var(--f-display);font-size:clamp(20px,5.4vw,28px);letter-spacing:.45em;margin-top:10px}
+h2{font-size:clamp(22px,5.5vw,28px);line-height:1.4}
+h3{font-size:18px;line-height:1.5}
+p{margin:0}
+.muted{color:var(--ink-soft)}
+.small{font-size:14px}
+.label{font-size:12px;letter-spacing:.18em;color:var(--ink-soft);font-weight:500}
+
+/* hero */
+.hero{text-align:center;display:grid;gap:18px;justify-items:center;padding-top:8px}
+.hero .q{font-family:var(--f-display);font-size:clamp(24px,6.6vw,34px);margin-top:6px}
+.chips{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:100%;max-width:520px}
+.chip{display:grid;justify-items:center;gap:6px;font-size:13px;line-height:1.4}
+.dot{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:var(--f-display);font-weight:600;font-size:15px;box-shadow:0 6px 18px -8px currentColor}
+.dot.b{background:radial-gradient(circle at 35% 30%,#8FB2E8,var(--blue) 70%)}
+.dot.y{background:radial-gradient(circle at 35% 30%,#F8D489,var(--yellow) 70%)}
+.dot.r{background:radial-gradient(circle at 35% 30%,#F29A8E,var(--red) 70%)}
+.dot.p{background:radial-gradient(circle at 35% 30%,#C7A6EC,var(--purple) 70%)}
+.meta{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;font-size:14px;color:var(--ink-soft)}
+.meta span::before{content:"✦ ";color:var(--gold)}
+
+.btn{appearance:none;border:0;cursor:pointer;font:inherit;font-weight:500;border-radius:999px;padding:14px 28px;background:var(--ink);color:var(--paper);letter-spacing:.08em;transition:transform .15s, box-shadow .15s;text-decoration:none;display:inline-flex;justify-content:center;align-items:center;gap:8px}
+.btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px -12px var(--ink)}
+.btn:focus-visible,.opt:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.big{padding:17px 40px;font-size:17px}
+.btn[disabled]{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+
+.panel{background:color-mix(in srgb,var(--card) 88%,transparent);border:1px solid var(--line);border-radius:var(--r);padding:22px;backdrop-filter:blur(6px)}
+.steps{display:grid;gap:14px;counter-reset:s;margin:0;padding:0;list-style:none}
+.steps li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start}
+.steps li::before{counter-increment:s;content:counter(s);width:30px;height:30px;border-radius:50%;border:1px solid var(--gold);color:var(--gold);display:grid;place-items:center;font-family:var(--f-latin);font-weight:600;font-size:17px;margin-top:2px}
+.steps b{font-weight:600}
+.note{font-size:13px;color:var(--ink-soft);line-height:1.7;border-left:2px solid var(--gold);padding-left:12px}
+
+/* quiz */
+.progress{display:grid;gap:8px}
+.bar{height:6px;border-radius:6px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--yellow),var(--red),var(--purple));transition:width .35s}
+.qhead{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-soft);letter-spacing:.1em;font-variant-numeric:tabular-nums}
+.scene{font-size:14px;color:var(--gold);font-weight:500;letter-spacing:.06em}
+.opts{display:grid;gap:12px}
+.opt{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;padding:16px 18px;border-radius:14px;background:var(--card);border:1px solid var(--line);transition:border-color .15s, transform .15s, background .15s;line-height:1.6}
+.opt:hover{border-color:var(--gold);transform:translateX(2px)}
+.opt .k{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-family:var(--f-latin);font-weight:600;font-size:16px;color:var(--ink-soft)}
+.opt.sel{border-color:var(--ink);background:var(--paper-2)}
+.opt.sel .k{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.scale{display:grid;gap:14px}
+.scale-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.scale-row .opt{grid-template-columns:1fr;justify-items:center;text-align:center;padding:14px 4px;gap:4px}
+.scale-row .opt .k{width:34px;height:34px}
+.scale-ends{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-soft)}
+.qnav{display:flex;justify-content:space-between;align-items:center;gap:12px}
+
+/* result */
+.result-hero{text-align:center;display:grid;justify-items:center;gap:10px;padding:34px 18px 26px;border-radius:24px;position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line)}
+.result-hero::before{content:"";position:absolute;inset:-30%;background:radial-gradient(circle at 50% 35%,var(--tone-soft) 0,transparent 60%);z-index:0}
+.result-hero>*{position:relative}
+.orb{width:132px;height:132px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffffffaa,var(--tone) 62%);box-shadow:0 18px 50px -14px var(--tone)}
+.result-hero .cname{font-family:var(--f-display);font-size:clamp(34px,9vw,46px);font-weight:700;color:var(--tone);letter-spacing:.1em}
+.result-hero .room{font-family:var(--f-display);font-size:18px;letter-spacing:.3em}
+.result-hero .guide{font-family:var(--f-display);font-size:clamp(19px,5vw,23px)}
+.kw{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.kw span{font-size:13px;padding:4px 12px;border-radius:999px;border:1px solid var(--tone);color:var(--tone)}
+.spectrum{display:grid;gap:10px}
+.srow{display:grid;grid-template-columns:52px 1fr 46px;gap:10px;align-items:center;font-size:14px;font-variant-numeric:tabular-nums}
+.srow .t{height:10px;border-radius:10px;background:var(--line);overflow:hidden}
+.srow .t i{display:block;height:100%;border-radius:10px;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.srow em{font-style:normal;text-align:right;color:var(--ink-soft)}
+.sec{display:grid;gap:14px}
+.sec>h2{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sec>h2 .eyebrow{font-size:16px}
+.route{display:grid;gap:0;list-style:none;margin:0;padding:0}
+.route li{display:grid;grid-template-columns:22px 1fr;gap:14px;position:relative;padding-bottom:18px}
+.route li::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--gold);margin-top:7px;margin-left:4px;z-index:1}
+.route li::after{content:"";position:absolute;left:10px;top:20px;bottom:0;width:2px;background:var(--line)}
+.route li:last-child::after{display:none}
+.route li.mine::before{background:var(--tone);border-color:var(--tone)}
+.route h3{font-size:16px}
+.route p{font-size:14px;color:var(--ink-soft)}
+.route .mission{color:var(--ink);background:var(--tone-soft);border-radius:10px;padding:8px 12px;margin-top:6px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:14px}
+.pick{display:grid;gap:6px}
+.pick .label{color:var(--tone)}
+.tickets{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.ticket{display:grid;gap:10px;padding:20px;border-radius:var(--r);background:var(--card);border:1px solid var(--line);position:relative}
+.ticket.rec{border-color:var(--tone);box-shadow:0 10px 30px -18px var(--tone)}
+.ticket .price{font-family:var(--f-latin);font-size:40px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.ticket .price small{font-family:var(--f-body);font-size:14px;font-weight:400;color:var(--ink-soft);margin-left:4px}
+.ticket ul{margin:0;padding-left:1.1em;font-size:14px;display:grid;gap:4px}
+.ticket .tag{position:absolute;top:-11px;right:16px;font-size:12px;background:var(--tone);color:#fff;padding:2px 10px;border-radius:999px;letter-spacing:.08em}
+.ticket[data-ticket]{display:flex;flex-direction:column;cursor:pointer;transition:border-color .15s, box-shadow .15s, transform .15s}
+.ticket[data-ticket]:hover{transform:translateY(-2px);border-color:var(--gold)}
+.ticket[data-ticket]:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.ticket.sel,.ticket.sel:hover{border-color:var(--tone);box-shadow:0 0 0 1px var(--tone),0 12px 32px -18px var(--tone)}
+.pickrow{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;padding-top:12px;border-top:1px solid var(--line);margin-top:auto;color:var(--ink-soft)}
+.pickrow i{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--ink-soft);display:grid;place-items:center;flex:none}
+.ticket.sel .pickrow{color:var(--tone)}
+.ticket.sel .pickrow i{background:var(--tone);border-color:var(--tone)}
+.ticket.sel .pickrow i::after{content:"";width:8px;height:8px;border-radius:50%;background:#fff}
+.pickrow .on,.ticket.sel .pickrow .off{display:none}
+.ticket.sel .pickrow .on{display:inline}
+.flabel{font-size:14px;font-weight:500}
+.picked{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;padding:12px 14px;border-radius:12px;background:var(--paper-2);border:1px solid var(--line)}
+.picked b{font-weight:600}
+.pills{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}
+.pills.slots{grid-template-columns:repeat(auto-fill,minmax(124px,1fr))}
+.pill{position:relative;cursor:pointer}
+.pill input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.pill span{display:grid;justify-items:center;padding:9px 6px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:13px;line-height:1.45;color:var(--ink-soft);transition:background .15s,border-color .15s}
+.pill span b{font-size:16px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.pill:hover span{border-color:var(--gold)}
+.pill input:checked+span{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.pill input:checked+span b{color:var(--paper)}
+.pill input:focus-visible+span{outline:3px solid var(--gold);outline-offset:2px}
+.pill input:disabled+span{opacity:.4;cursor:not-allowed;text-decoration:line-through}
+.coupon{display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:14px;border:1.5px dashed var(--gold);font-size:14px}
+.coupon b{font-family:var(--f-latin);font-size:26px;color:var(--gold);white-space:nowrap}
+details{border-top:1px solid var(--line)}
+details:last-child{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;padding:14px 0;font-weight:500;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--gold);font-size:20px;line-height:1}
+details[open] summary::after{content:"−"}
+details>div{padding:0 0 16px;font-size:15px;color:var(--ink-soft)}
+.actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.care{font-size:14px;background:var(--paper-2);border-radius:14px;padding:14px 16px}
+.wrap a{color:var(--ink);font-weight:500;text-underline-offset:3px;text-decoration-color:var(--gold)}
+.addr{user-select:all}
+
+/* booking & pass */
+form{display:grid;gap:16px}
+.field{display:grid;gap:6px}
+.field label{font-size:14px;font-weight:500}
+input,select{font:inherit;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:100%}
+.radio-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px}
+.radio-row label{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);cursor:pointer;font-weight:400}
+.radio-row input{width:auto;margin-top:6px;accent-color:var(--ink)}
+.err{color:var(--red);font-size:13px}
+.pass{border-radius:22px;overflow:hidden;background:var(--card);border:1px solid var(--line);box-shadow:0 24px 60px -30px var(--tone)}
+.pass-top{padding:22px 22px 18px;background:linear-gradient(135deg,var(--tone-soft),transparent 75%);display:grid;gap:4px;position:relative}
+.pass-top .brand{font-size:28px}
+.pass-top .orb{position:absolute;right:18px;top:18px;width:64px;height:64px}
+.pass-body{display:grid;grid-template-columns:1fr auto;gap:18px;padding:18px 22px 22px;border-top:2px dashed var(--line);align-items:center}
+.pass-body dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px}
+.pass-body dt{color:var(--ink-soft)}
+.pass-body dd{margin:0;font-weight:500;min-width:0;overflow-wrap:anywhere}
+.qr{background:#fff;padding:8px;border-radius:10px;width:132px;height:132px}
+.qr img,.qr canvas{width:116px!important;height:116px!important;display:block}
+.pass-foot{padding:14px 22px;font-size:13px;color:var(--ink-soft);background:var(--paper-2);display:grid;gap:4px}
+@media (max-width:440px){.pass-body{grid-template-columns:1fr;justify-items:center}.pass-body dl{width:100%}}
+.share-img{width:100%;max-width:320px;border-radius:16px;border:1px solid var(--line);justify-self:center}
+
+/* method */
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+th,td{text-align:left;vertical-align:top;padding:10px 8px;border-bottom:1px solid var(--line)}
+th{font-weight:600;font-size:13px;color:var(--ink-soft);letter-spacing:.06em}
+.tbl{overflow-x:auto}
+.tbl table.wide{min-width:780px}
+.fab{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:14px;line-height:1.6}
+.fab dt{color:var(--gold);font-weight:500;letter-spacing:.1em}
+.fab dd{margin:0;min-width:0}
+.after{margin:0;padding-left:1.1em;display:grid;gap:10px;font-size:15px}
+.ref{font-size:13px;color:var(--ink-soft);display:grid;gap:4px;padding-left:1.1em;margin:0}
+footer{text-align:center;font-size:12px;color:var(--ink-soft);display:grid;gap:4px;padding-top:36px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="aura" aria-hidden="true"><i data-c="b"></i><i data-c="y"></i><i data-c="r"></i><i data-c="p"></i></div>
+
+<div class="wrap">
+  <header class="top"><b>麗水書局</b><span>集英樓二樓 · THE COLOR LAB</span></header>
+
+  <!-- LANDING -->
+  <main class="view" id="v-home">
+    <section class="hero">
+      <span class="eyebrow">Turn Your Feelings Into Art.</span>
+      <h1 class="brand"><small>THE</small>COLOR LAB</h1>
+      <div class="brand-zh">色彩情緒研究所</div>
+      <p class="q">今天的你是什麼顏色？</p>
+      <p class="muted">每一種情緒，都值得被看見。</p>
+      <div class="chips" aria-label="四種情緒代表色">
+        <div class="chip"><span class="dot b">藍</span>平靜<br><span class="muted small">靜謐之海</span></div>
+        <div class="chip"><span class="dot y">黃</span>快樂<br><span class="muted small">快樂日光</span></div>
+        <div class="chip"><span class="dot r">紅</span>能量<br><span class="muted small">熱情脈動</span></div>
+        <div class="chip"><span class="dot p">紫</span>可能<br><span class="muted small">想像宇宙</span></div>
+      </div>
+      <div class="meta"><span>10 題</span><span>約 2 分鐘</span><span>免登入</span><span>不需藝術基礎</span></div>
+      <button class="btn big" id="start">開始測驗</button>
+      <button class="btn ghost" id="resume" hidden>查看我上次的結果</button>
+    </section>
+
+    <section class="panel sec">
+      <h2>先做測驗，再帶著你的顏色走進書店</h2>
+      <ol class="steps">
+        <li><div><b>線上測驗</b><br><span class="muted small">回答 10 題（8 個生活情境、2 題自評），得到今天的情緒代表色、對應的色彩空間與選書方向。</span></div></li>
+        <li><div><b>預約取得報到 QR Code</b><br><span class="muted small">選擇 NT$100 基本體驗票或 NT$200 創作體驗票（含拼貼工作坊，採預約制）。</span></div></li>
+        <li><div><b>現場領取「情緒通行證」</b><br><span class="muted small">入口掃碼報到，領取印有你的代表色、情緒關鍵字與探索任務的通行證，開始五大體驗區。</span></div></li>
+      </ol>
+      <p class="note">這是一個情緒探索的小遊戲，用來陪你整理「今天想要什麼樣的感受」，不是心理診斷，也不是固定的人格分類。到了現場，你可以自由走進四個色彩空間，選出真正有共鳴的那一色。</p>
+    </section>
+
+    <details class="panel" id="method" style="border-bottom:1px solid var(--line)">
+      <summary>測驗設計說明（給好奇的你）</summary>
+      <div class="sec" style="color:var(--ink)">
+        <p><b>測什麼：今天「想要」的情緒狀態，而不是人格。</b>企劃書明定色彩與情緒的對應「並非心理診斷或固定的人格分類」，因此本測驗量的是當下的情緒需求（state），不是穩定特質（trait）。題目都以「今天、這週、現在」為時間框架。</p>
+        <p><b>理論依據。</b>(1) Russell 的情感環狀模型以「愉悅度 × 喚醒度」描述情緒；(2) Tsai 的情感評價理論區分「實際情緒」與「理想情緒」，並把理想情緒分成高喚醒正向（興奮、有活力）與低喚醒正向（平靜、放鬆）；(3) 大五人格中的「經驗開放性」描述對新奇、想像與美感的追求，這裡改寫成「今天想探索新可能」的狀態題。四色由此對應：</p>
+        <div class="tbl"><table>
+          <thead><tr><th>代表色</th><th>今天想要的感受</th><th>心理構面</th><th>現場空間</th></tr></thead>
+          <tbody>
+            <tr><td>藍</td><td>找回平靜</td><td>低喚醒正向（LAP）：放鬆、沉澱、恢復</td><td>靜謐之海</td></tr>
+            <tr><td>黃</td><td>收集快樂</td><td>正向愉悅與社會連結：分享、品味小確幸</td><td>快樂日光</td></tr>
+            <tr><td>紅</td><td>釋放能量</td><td>高喚醒正向（HAP）：行動、表達、宣洩</td><td>熱情脈動</td></tr>
+            <tr><td>紫</td><td>探索可能</td><td>經驗開放性（狀態）：新奇、想像、意義</td><td>想像宇宙</td></tr>
+          </tbody>
+        </table></div>
+        <p><b>題目與計分。</b>第 1–8 題為情境選擇題，四個選項各對應一種理想情緒（作答時選項順序隨機，避免位置偏誤）；第 1–7 題每題 2 分，第 8 題直接詢問「今天想帶走的感受」，計 3 分並作為同分時的決勝題。第 9–10 題為 5 點量表，測當下的喚醒度與愉悅度：能量低（1–2）加給藍 1.5 分、能量高（4–5）加給紅 1.5 分；心情低（1–2）加給藍 1 分、心情高（4–5）加給黃 1 分。結果顯示四色比例的「情緒光譜」，提醒你情緒是混合的，代表色只是今天最突出的一種。</p>
+        <ol class="ref">
+          <li>Russell, J. A. (1980). A circumplex model of affect. <i>Journal of Personality and Social Psychology, 39</i>(6), 1161–1178.</li>
+          <li>Tsai, J. L. (2007). Ideal affect: Cultural causes and behavioral consequences. <i>Perspectives on Psychological Science, 2</i>(3), 242–259.</li>
+          <li>Goldberg, L. R. (1992). The development of markers for the Big-Five factor structure. <i>Psychological Assessment, 4</i>(1), 26–42.（IPIP 公開量表的構面基礎）</li>
+          <li>Valdez, P., &amp; Mehrabian, A. (1994). Effects of color on emotions. <i>Journal of Experimental Psychology: General, 123</i>(4), 394–409.</li>
+        </ol>
+      </div>
+    </details>
+  </main>
+
+  <!-- QUIZ -->
+  <main class="view" id="v-quiz" hidden>
+    <div class="progress">
+      <div class="qhead"><span id="qcount">01 / 10</span><span id="qpart">情境題</span></div>
+      <div class="bar"><i id="qbar"></i></div>
+    </div>
+    <section class="sec" aria-live="polite">
+      <span class="scene" id="qscene"></span>
+      <h2 id="qtext"></h2>
+      <div id="qopts"></div>
+    </section>
+    <div class="qnav">
+      <button class="btn ghost" id="back">上一題</button>
+      <span class="small muted">選完會自動前往下一題</span>
+    </div>
+  </main>
+
+  <!-- RESULT -->
+  <main class="view" id="v-result" hidden>
+    <section class="result-hero">
+      <span class="label">今天的你是</span>
+      <div class="orb"></div>
+      <div class="cname" id="rName"></div>
+      <div class="room" id="rRoom"></div>
+      <p class="guide" id="rGuide"></p>
+      <div class="kw" id="rKw"></div>
+    </section>
+
+    <section class="panel sec">
+      <h2>你的情緒光譜</h2>
+      <div class="spectrum" id="rSpec"></div>
+      <p id="rRead"></p>
+      <p class="care" id="rCare" hidden></p>
+    </section>
+
+    <section class="actions">
+      <button class="btn ghost" id="toShare">製作分享卡</button>
+      <button class="btn ghost" id="retake">重新測驗</button>
+    </section>
+    <section class="sec" id="shareBox" hidden>
+      <img class="share-img" id="shareImg" alt="我的 THE COLOR LAB 情緒代表色分享卡">
+      <p class="small muted" style="text-align:center">請長按或右鍵儲存上方圖片。</p>
+    </section>
+
+    <section class="sec">
+      <h2>你的展區路線 <span class="eyebrow">clockwise route</span></h2>
+      <p class="muted small">全場為順時針單向動線。測驗結果不限制你能去哪裡，四個色彩空間都可以自由探索。</p>
+      <ol class="route" id="rRoute"></ol>
+    </section>
+
+    <section class="grid2">
+      <div class="panel pick"><span class="label">推薦先看的作品</span><h3 id="rArt"></h3><p class="small muted" id="rArtWhy"></p></div>
+      <div class="panel pick"><span class="label">選書區為你準備</span><h3 id="rBook"></h3><p class="small muted" id="rBookWhy"></p></div>
+    </section>
+
+    <section class="panel sec">
+      <h2>情緒拼貼工作坊怎麼進行</h2>
+      <p class="muted small">創作體驗票專屬。工作人員會先說明各種材料怎麼用，再陪你走完三個階段，不需要任何藝術或繪畫基礎。</p>
+      <ol class="steps">
+        <li><div><b>選擇情緒</b><br><span class="muted small">回顧線上測驗和色彩沉浸體驗區的感受，選出最能代表此刻心情的色彩與主題。</span></div></li>
+        <li><div><b>拼貼創作</b><br><span class="muted small">用色紙、雜誌剪報、貼紙、印章與彩色筆拼貼。例如以藍色作背景，搭配海洋、星空與文字，做出代表「想要放慢腳步」的作品。</span></div></li>
+        <li><div><b>分享與展示</b><br><span class="muted small">為作品命名，自己決定帶回家、貼上「我們的情緒美術館」展牆，或上傳線上數位美術館。經本人同意才會公開。</span></div></li>
+      </ol>
+    </section>
+
+    <section class="sec">
+      <h2>參加前常見的疑問</h2>
+      <div>
+        <details><summary>我完全沒有畫畫或藝術基礎，可以參加嗎？</summary><div>可以。拼貼工作坊用的是色紙、雜誌剪報、貼紙和印章，不需要畫畫。工作人員會先說明材料用法，再一步步引導你完成，流程見上方「情緒拼貼工作坊怎麼進行」。</div></details>
+        <details><summary>做好的作品一定要公開展示嗎？</summary><div>不一定。完成後可以自己決定帶回家、貼上現場的「我們的情緒美術館」展牆，或上傳到線上數位美術館。上傳一定要經過你本人同意才會公開。</div></details>
+        <details><summary>測驗結果是藍色，就只能去藍色空間嗎？</summary><div>不是。四個色彩空間都可以自由進出。各空間設有簡單的情緒問題，你可以掃描通行證上的 QR Code 記錄感受，最後比較線上測驗和現場最有共鳴的顏色是否一致。</div></details>
+        <details><summary>現場要怎麼報到？需要多久？</summary><div>出示預約後拿到的 QR Code，在入口迎賓區掃碼，就能領取對應你代表色的情緒通行證。入口設有活動流程與各區導覽資訊。每個場次 60 分鐘。</div></details>
+        <details><summary>留言牆會公開我的名字嗎？</summary><div>留言是自願的，並提供匿名展示選項，由你決定要分享多少。</div></details>
+        <details><summary>活動地點在哪裡？</summary><div>麗水書局，位於政治大學集英樓 2 樓。<br>地址：<span class="addr">116臺北市文山區萬興里指南路二段64號集英樓政治大學2樓</span><br><a href="https://maps.app.goo.gl/JZEh72cvS6vcDxKUA" target="_blank" rel="noopener">在 Google 地圖開啟</a></div></details>
+      </div>
+    </section>
+
+    <section class="panel sec">
+      <h2>離開書店之後</h2>
+      <ul class="after">
+        <li><b>COLOR SHARE</b>：體驗結束後在 IG 限時動態或 Threads 分享並標記官方帳號，即可領取限定情緒藝術貼紙。</li>
+        <li><b>線上人氣票選</b>：到線上數位展覽為喜歡的情緒拼貼作品投票，也可以把作品連結分享給朋友。</li>
+        <li><b>持券回店</b>：用門票附贈的「購書滿 $300 折 $50」優惠券，回麗水書局選購藝術與心理主題書籍。</li>
+      </ul>
+    </section>
+
+    <section class="sec" id="plans">
+      <h2>選擇方案並預約</h2>
+      <p class="muted small">點選一個方案，再按下方按鈕預約。完成後會拿到報到 QR Code 與你的情緒通行證。</p>
+      <div class="tickets" role="radiogroup" aria-label="選擇票種">
+        <div class="ticket" id="t100" data-ticket="100" role="radio" aria-checked="false" tabindex="-1">
+          <span class="label">基本體驗票</span>
+          <div class="price">NT$100<small>/ 人</small></div>
+          <dl class="fab"><dt>特色</dt><dd>四大色彩沉浸空間、藝術展覽與作品情緒投票、今日情緒留言牆、線上數位展覽</dd><dt>優勢</dt><dd>不需任何藝術基礎，依自己的節奏自由探索四色空間與展覽</dd><dt>利益</dt><dd>在校園裡花一段時間轉換心情，看見今天的情緒</dd></dl>
+          <div class="pickrow"><i></i><span class="off">點選此方案</span><span class="on">已選擇此方案</span></div>
+        </div>
+        <div class="ticket sel" id="t200" data-ticket="200" role="radio" aria-checked="true" tabindex="0">
+          <span class="tag" id="t200tag">推薦給你</span>
+          <span class="label">創作體驗票</span>
+          <div class="price">NT$200<small>/ 人</small></div>
+          <dl class="fab"><dt>特色</dt><dd>基本體驗票全部內容，加上情緒拼貼工作坊、全部創作材料與工作人員引導</dd><dt>優勢</dt><dd>用色紙、剪報與貼紙拼貼，不必會畫畫，三個階段就能完成</dd><dt>利益</dt><dd>把今天的感受變成一張專屬的 A6 情緒拼貼卡，可帶回、上展牆或參加線上票選</dd></dl>
+          <p class="small muted">工作坊涉及材料與現場人力，名額有限，採線上預約。</p>
+          <div class="pickrow"><i></i><span class="off">點選此方案</span><span class="on">已選擇此方案</span></div>
+        </div>
+      </div>
+      <div class="coupon"><b>$50</b><span>每張門票都附「購書滿 $300 折 $50」優惠券，活動後回到麗水書局也能使用。</span></div>
+      <p class="note" id="hasPass" hidden></p>
+      <div class="actions"><button class="btn big" id="pickBook">用「創作體驗票 NT$200」預約</button></div>
+    </section>
+
+  </main>
+
+  <!-- BOOKING -->
+  <main class="view" id="v-book" hidden>
+    <section class="sec">
+      <span class="eyebrow">Reservation</span>
+      <h2>預約 THE COLOR LAB</h2>
+      <p class="muted small" id="bIntro">完成預約後會產生報到 QR Code，可以存成圖片保存，到場時在入口出示。</p>
+    </section>
+    <form id="bookForm" class="panel" novalidate>
+      <div class="field"><label for="bName">怎麼稱呼你</label><input id="bName" autocomplete="nickname" placeholder="例如：Andy" maxlength="20"></div>
+      <div class="field"><span class="flabel">票種</span>
+        <div class="picked"><b id="bTicket">創作體驗票 NT$200</b><span class="small muted">要更換票種，請按「回上一頁」重新選擇。</span></div>
+      </div>
+      <div class="field"><span class="flabel" id="bDatesLabel">到場日期</span>
+        <p class="small muted">營業時間：週一至週五 10:00–19:00、週六 12:00–19:00，週日公休。</p>
+        <div class="pills" id="bDates" role="radiogroup" aria-labelledby="bDatesLabel"></div>
+      </div>
+      <div class="field"><span class="flabel" id="bSlotsLabel">場次</span>
+        <p class="small muted">每場 60 分鐘，最後一場在 19:00 閉店前結束。</p>
+        <div class="pills slots" id="bSlots" role="radiogroup" aria-labelledby="bSlotsLabel"></div>
+      </div>
+      <p class="err" id="bErr" hidden></p>
+      <div class="actions"><button class="btn big" type="submit">確認預約</button><button class="btn ghost" type="button" id="bBack">回上一頁</button></div>
+      <p class="note">展示用原型：這個頁面不會寄出 Email，預約資料只存在你這台裝置的瀏覽器。完成後請把通行證存成圖片或截圖保存；正式上線時再串接書局的報名系統寄送確認信。</p>
+    </form>
+  </main>
+
+  <!-- PASS -->
+  <main class="view" id="v-pass" hidden>
+    <section class="sec" style="text-align:center">
+      <span class="eyebrow">Emotion Pass</span>
+      <h2>預約完成，這是你的情緒通行證</h2>
+      <p class="muted small">到場時在入口出示 QR Code，換取實體通行證。請把通行證存成圖片或截圖保存。</p>
+    </section>
+    <article class="pass" id="passCard">
+      <div class="pass-top">
+        <span class="label">THE COLOR LAB · 情緒通行證</span>
+        <div class="brand" style="font-size:30px" id="pColor"></div>
+        <p class="small" id="pGuide"></p>
+        <div class="orb"></div>
+      </div>
+      <div class="pass-body">
+        <dl>
+          <dt>姓名</dt><dd id="pName"></dd>
+          <dt>票種</dt><dd id="pTicket"></dd>
+          <dt>場次</dt><dd id="pSlot"></dd>
+          <dt>關鍵字</dt><dd id="pKw"></dd>
+          <dt>編號</dt><dd id="pCode" style="font-family:var(--f-latin);font-size:17px;letter-spacing:.08em"></dd>
+        </dl>
+        <div class="qr" id="pQR" aria-label="報到 QR Code"></div>
+      </div>
+      <div class="pass-foot">
+        <span><b style="color:var(--ink)">今日探索任務：</b><span id="pMission"></span></span>
+        <span>附贈：購書滿 $300 折 $50 優惠券一張 · 地點：麗水書局｜集英樓二樓（<a href="https://maps.app.goo.gl/JZEh72cvS6vcDxKUA" target="_blank" rel="noopener">Google 地圖</a>）</span>
+      </div>
+    </article>
+    <section class="actions">
+      <button class="btn" id="dlPass">製作通行證圖片</button>
+      <button class="btn ghost" id="pShare">製作分享卡</button>
+      <button class="btn ghost" id="pBack">回上一頁</button>
+      <button class="btn ghost" id="pResult">回到我的結果</button>
+    </section>
+    <section class="sec" id="passBox" hidden>
+      <img class="share-img" id="passImg" alt="我的 THE COLOR LAB 情緒通行證圖片">
+      <p class="small muted" style="text-align:center">請長按或右鍵儲存上方圖片。</p>
+    </section>
+    <section class="sec" id="shareBox2" hidden>
+      <img class="share-img" id="shareImg2" alt="我的 THE COLOR LAB 情緒代表色分享卡">
+      <p class="small muted" style="text-align:center">請長按或右鍵儲存上方圖片。</p>
+    </section>
+  </main>
+
+  <footer>
+    <span>THE COLOR LAB 色彩情緒研究所 · 麗水書局｜集英樓二樓</span>
+    <span>本測驗為活動情緒探索工具，非心理診斷或人格分類。</span>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(function(){
+"use strict";
+var C = {
+  b:{key:"b",name:"藍色",en:"BLUE",room:"靜謐之海",guide:"今天想找回一點平靜。",kw:["平靜","沉澱"],var:"--blue",soft:"--blue-soft",
+     sense:"藍色光影、流水投影，配上柔和的鋼琴與流水聲。",
+     read:"你今天最想要的是「低喚醒的正向感受」：放鬆、慢下來、讓腦袋安靜一點。這通常出現在連續趕工或壓力累積之後，是很自然的恢復需求。",
+     mission:"在「靜謐之海」聽完一段鋼琴與流水聲，寫下一個讓你想放慢腳步的畫面。",
+     art:"馬諦斯《藍色的裸女 II》",artWhy:"用最簡化的剪紙造型與單一藍色完成作品，留白多、節奏慢，適合想沉澱的你。也和拼貼工作坊用的是同一種創作語言。",
+     book:"情緒與創作、音樂美學",bookWhy:"從「書寫與創作如何安頓情緒」的書開始，搭配一本談聆聽與聲音的音樂美學。"},
+  y:{key:"y",name:"黃色",en:"YELLOW",room:"快樂日光",guide:"今天想收集一些快樂。",kw:["愉悅","活力"],var:"--yellow",soft:"--yellow-soft",
+     sense:"暖黃色燈光與動態光點，搭配輕快的旋律。",
+     read:"你今天偏向「品味與分享快樂」：想跟朋友一起、把小確幸放大一點。正向情緒和人際連結是你此刻的充電方式。",
+     mission:"在「快樂日光」找到一個讓你嘴角上揚的光點，拍下來，寫下它讓你想到的人。",
+     art:"馬諦斯晚期剪紙作品",artWhy:"明亮的色塊與跳躍的造型，是馬諦斯用剪刀「畫」出的快樂。看完可以直接到工作坊試試同樣的手法。",
+     book:"平面設計、藝術家作品集",bookWhy:"翻翻用色大膽的平面設計與插畫作品集，最適合和朋友一起邊翻邊聊。"},
+  r:{key:"r",name:"紅色",en:"RED",room:"熱情脈動",guide:"今天想釋放內心的能量。",kw:["熱情","能量"],var:"--red",soft:"--red-soft",
+     sense:"紅色幾何投影、動態光線與節奏鮮明的音樂。",
+     read:"你今天偏向「高喚醒的正向感受」：想行動、想表達，把累積的情緒用力地釋放出來。這股能量很適合轉成創作。",
+     mission:"在「熱情脈動」跟著節奏走一圈，寫下一件你想釋放、或想勇敢去做的事。",
+     art:"康丁斯基《構成第八號》",artWhy:"幾何形狀、線條與色彩像一首交響樂，和紅色空間的幾何投影與節奏感最接近。",
+     book:"色彩理論、音樂美學",bookWhy:"從康丁斯基談色彩與聲音的關係出發，看看顏色為什麼能讓人「聽見」節奏。"},
+  p:{key:"p",name:"紫色",en:"PURPLE",room:"想像宇宙",guide:"今天想探索更多可能。",kw:["想像","神秘"],var:"--purple",soft:"--purple-soft",
+     sense:"紫色星光投影、透明紗幕與空靈的環境音樂。",
+     read:"你今天偏向「探索與想像」：想換個角度、碰碰沒試過的東西。這對應心理學的經驗開放性，常在卡關或需要新方向時出現。",
+     mission:"在「想像宇宙」的星光下回答：如果換一種方式，你最想試試什麼？",
+     art:"梵谷《星夜》",artWhy:"旋轉的夜空與強烈的筆觸，把想像畫成看得見的宇宙，和紫色空間的星光投影互相呼應。",
+     book:"藝術家作品集、情緒與創作",bookWhy:"挑一本平常不會拿起的藝術家作品集，讓陌生的畫面幫你打開新的想法。"}
+};
+var ORDER=["b","y","r","p"];
+
+var Q=[
+ {scene:"論文、報告剛交出去的晚上",text:"終於告一段落，今晚你最想做的是？",o:{b:"關掉通知，一個人散步或泡個澡",y:"約朋友吃頓好吃的，小小慶祝一下",r:"去運動、唱歌，把累積的能量全部用掉",p:"看一部沒看過的電影，或去逛個新地方"}},
+ {scene:"打開音樂 App",text:"此刻你最想按下播放的是？",o:{b:"柔和的鋼琴，或流水般的白噪音",y:"輕快、會讓人想跟著哼的旋律",r:"節奏強烈的搖滾或電子音樂",p:"空靈的電影配樂或環境音樂"}},
+ {scene:"推開一扇門",text:"眼前的房間裡，最吸引你的是？",o:{b:"緩緩流動的藍色水光",y:"灑滿暖黃陽光的窗邊",r:"隨著音樂跳動的幾何光線",p:"整片星光與輕輕飄動的紗幕"}},
+ {scene:"這週的手機桌布上",text:"你會想放上哪一句話？",o:{b:"慢慢來，比較快。",y:"今天也有值得開心的小事。",r:"想做的事，現在就去做。",p:"如果換一種方式呢？"}},
+ {scene:"寫到一半卡關了",text:"這時候你最需要的是？",o:{b:"一個安靜的角落，把思緒重新整理好",y:"有人陪你聊聊天、說說笑",r:"一口氣衝刺，或先把情緒發洩出來",p:"跳去看完全不同領域的東西找靈感"}},
+ {scene:"拿到一張白紙和一盒拼貼材料",text:"你會先怎麼開始？",o:{b:"撕一張藍色紙，慢慢鋪滿背景",y:"剪下雜誌裡讓你會心一笑的圖片",r:"用最鮮豔的顏色大膽貼下第一塊",p:"先隨意拼拼看，等畫面自己長出來"}},
+ {scene:"週末在書店的一小時",text:"你理想的書店時光是？",o:{b:"窩在角落，安靜讀完幾頁",y:"和朋友一起逛，互相推薦好書",r:"參加一場可以動手、互動的活動",p:"隨手拿起一本從沒讀過的類型"}},
+ {scene:"留言牆上的一句話",text:"「今天，我想帶走的感受是＿＿」",o:{b:"平靜",y:"快樂",r:"勇氣與能量",p:"好奇與可能"},w:3},
+ {scene:"現在這一刻",text:"你的身心能量大概是？",scale:true,ends:["很疲憊","充滿電"],id:"energy"},
+ {scene:"最近一週",text:"整體來說，你的心情大概是？",scale:true,ends:["有點低落","很不錯"],id:"mood"}
+];
+
+var S={answers:[],order:[],i:0,result:null,booking:null};
+function store(k,v){try{localStorage.setItem("colorlab-"+k,JSON.stringify(v))}catch(e){}}
+function load(k){try{var v=localStorage.getItem("colorlab-"+k);return v?JSON.parse(v):null}catch(e){return null}}
+function $(id){return document.getElementById(id)}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+
+function show(v){
+  ["home","quiz","result","book","pass"].forEach(function(n){$("v-"+n).hidden=(n!==v)});
+  window.scrollTo({top:0,behavior:"instant" in window?"instant":"auto"});
+}
+function setTone(k){
+  var root=document.body;
+  if(!k){root.removeAttribute("data-tone");root.style.removeProperty("--tone");root.style.removeProperty("--tone-soft");document.querySelectorAll(".aura i").forEach(function(el){el.classList.remove("on")});return}
+  root.setAttribute("data-tone",k);
+  root.style.setProperty("--tone","var("+C[k].var+")");
+  root.style.setProperty("--tone-soft","var("+C[k].soft+")");
+  document.querySelectorAll(".aura i").forEach(function(el){el.classList.toggle("on",el.dataset.c===k)});
+}
+
+/* ---------- quiz ---------- */
+function startQuiz(){
+  S.answers=new Array(Q.length).fill(null);
+  S.order=Q.map(function(q){return q.scale?null:shuffle(ORDER)});
+  S.i=0;goto("quiz");
+}
+function renderQ(){
+  var q=Q[S.i],n=S.i+1;
+  $("qcount").textContent=(n<10?"0"+n:n)+" / "+Q.length;
+  $("qpart").textContent=q.scale?"自評量表":"情境題";
+  $("qbar").style.width=(S.i/Q.length*100)+"%";
+  $("qscene").textContent=q.scene;
+  $("qtext").textContent=q.text;
+  var box=$("qopts"),html="";
+  if(q.scale){
+    html='<div class="scale"><div class="scale-row" role="radiogroup" aria-label="'+esc(q.text)+'">';
+    for(var v=1;v<=5;v++){html+='<button class="opt'+(S.answers[S.i]===v?" sel":"")+'" data-v="'+v+'" role="radio" aria-checked="'+(S.answers[S.i]===v)+'"><span class="k">'+v+'</span></button>'}
+    html+='</div><div class="scale-ends"><span>1 '+esc(q.ends[0])+'</span><span>5 '+esc(q.ends[1])+'</span></div></div>';
+  }else{
+    html='<div class="opts" role="radiogroup" aria-label="'+esc(q.text)+'">';
+    S.order[S.i].forEach(function(c,idx){html+='<button class="opt'+(S.answers[S.i]===c?" sel":"")+'" data-v="'+c+'" role="radio" aria-checked="'+(S.answers[S.i]===c)+'"><span class="k">'+"ABCD"[idx]+'</span><span>'+esc(q.o[c])+'</span></button>'});
+    html+='</div>';
+  }
+  box.innerHTML=html;
+  $("back").disabled=false;
+  $("back").textContent=S.i===0?"回首頁":"上一題";
+}
+$("qopts").addEventListener("click",function(e){
+  var b=e.target.closest(".opt");if(!b)return;
+  var q=Q[S.i];S.answers[S.i]=q.scale?Number(b.dataset.v):b.dataset.v;
+  this.querySelectorAll(".opt").forEach(function(x){x.classList.toggle("sel",x===b);x.setAttribute("aria-checked",x===b)});
+  setTimeout(function(){if(S.i<Q.length-1){S.i++;renderQ()}else{$("qbar").style.width="100%";finish()}},260);
+});
+$("back").addEventListener("click",function(){if(S.i===0){back("home");return}S.i--;renderQ()});
+
+/* ---------- scoring ---------- */
+function score(ans){
+  var s={b:0,y:0,r:0,p:0};
+  for(var i=0;i<8;i++){var c=ans[i];if(c)s[c]+=(Q[i].w||2)}
+  var en=ans[8],md=ans[9];
+  if(en<=2)s.b+=1.5;else if(en>=4)s.r+=1.5;
+  if(md<=2)s.b+=1;else if(md>=4)s.y+=1;
+  var max=Math.max(s.b,s.y,s.r,s.p);
+  var tops=ORDER.filter(function(k){return s[k]===max});
+  var main=tops.length===1?tops[0]:(tops.indexOf(ans[7])>-1?ans[7]:(tops.indexOf(ans[2])>-1?ans[2]:tops[0]));
+  var rest=ORDER.filter(function(k){return k!==main}).sort(function(a,b){return s[b]-s[a]});
+  var total=s.b+s.y+s.r+s.p;
+  var pct={};ORDER.forEach(function(k){pct[k]=Math.round(s[k]/total*100)});
+  return {main:main,second:rest[0],scores:s,pct:pct,energy:en,mood:md};
+}
+function finish(){
+  S.result=score(S.answers);S.result.id=Date.now();store("result",S.result);goto("result");
+}
+
+/* ---------- result ---------- */
+var ZONES=[
+  {n:"入口迎賓區",d:"出示預約 QR Code 報到，領取你的情緒通行證。"},
+  {n:"色彩沉浸體驗區",d:"藍、黃、紅、紫四個主題空間，以燈光、投影與音樂營造不同情緒。"},
+  {n:"休息交流區",d:"在「今日情緒留言牆」完成句子：今天，我想帶走的感受是＿＿。"},
+  {n:"情緒創作與共創展示區",d:"創作體驗票專屬：在引導下完成 A6 情緒拼貼卡，自選是否展示。"},
+  {n:"藝術展覽與選書區",d:"梵谷、康丁斯基、馬諦斯作品旁，用 QR Code 投票「這幅畫在表達什麼情緒」。"}
+];
+function renderResult(){
+  var r=S.result,c=C[r.main],c2=C[r.second];
+  setTone(r.main);
+  $("rName").textContent=c.name;
+  $("rRoom").textContent=c.room;
+  $("rGuide").textContent=c.guide;
+  $("rKw").innerHTML=c.kw.map(function(k){return "<span>"+k+"</span>"}).join("");
+  $("rSpec").innerHTML=ORDER.map(function(k){return '<div class="srow"><span>'+C[k].name+'</span><span class="t"><i style="width:0;background:var('+C[k].var+')" data-w="'+r.pct[k]+'"></i></span><em>'+r.pct[k]+'%</em></div>'}).join("");
+  requestAnimationFrame(function(){requestAnimationFrame(function(){document.querySelectorAll("#rSpec i").forEach(function(i){i.style.width=i.dataset.w+"%"})})});
+  var en=r.energy,md=r.mood;
+  var state=(en<=2?"能量偏低":en>=4?"能量充足":"能量持平")+"、"+(md<=2?"心情有點低落":md>=4?"心情不錯":"心情普通");
+  $("rRead").innerHTML=esc(c.read)+" 你自評此刻"+state+"。光譜中排第二的是<b>"+c2.name+"</b>，到了現場，也可以去「"+c2.room+"」看看哪一色更有共鳴。";
+  var care=$("rCare");
+  if(md<=2&&en<=2){care.hidden=false;care.textContent="謝謝你誠實回答。如果低落或疲憊的感覺已經持續兩週以上，可以找學校的身心健康中心或信任的人聊聊。這個測驗只是陪你看見今天的狀態，不取代專業協助。"}else care.hidden=true;
+  $("rRoute").innerHTML=ZONES.map(function(z,i){
+    var mine=(i===1),extra="";
+    if(i===1)extra='<p class="mission">先到「'+c.room+'」：'+esc(c.sense)+'<br>探索任務：'+esc(c.mission)+'</p>';
+    return '<li class="'+(mine?"mine":"")+'"><div><h3>'+z.n+'</h3><p>'+z.d+'</p>'+extra+'</div></li>';
+  }).join("");
+  $("rArt").textContent=c.art;$("rArtWhy").textContent=c.artWhy;
+  $("rBook").textContent=c.book;$("rBookWhy").textContent=c.bookWhy;
+  pickTicket(S.ticket||"200");
+  var hp=$("hasPass");
+  if(S.booking){
+    var bk=(S.booking.dateLabel||S.booking.date)+" "+S.booking.slot+"（"+TICKET_NAME[S.booking.ticket]+"）";
+    hp.hidden=false;
+    hp.textContent=bookingCurrent()?"你已經預約 "+bk+"。再次預約會更新原本的通行證。"
+      :"你先前預約了 "+bk+"，當時是依上一次的測驗結果。按下方按鈕確認後，通行證會換成這次的「"+c.name+"」。";
+  }else hp.hidden=true;
+  $("shareBox").hidden=true;
+  show("result");
+}
+$("start").addEventListener("click",startQuiz);
+$("retake").addEventListener("click",startQuiz);
+$("resume").addEventListener("click",function(){goto("result")});
+/* A pass belongs to the quiz result it was confirmed with; after a retake it must be confirmed again. */
+function bookingCurrent(){return !!(S.booking&&S.result&&S.booking.rid===S.result.id)}
+
+/* ---------- ticket choice ---------- */
+S.ticket="200";
+var TICKET_NAME={"100":"基本體驗票 NT$100","200":"創作體驗票 NT$200"};
+function pickTicket(v){
+  S.ticket=v;
+  document.querySelectorAll(".ticket[data-ticket]").forEach(function(el){
+    var on=el.dataset.ticket===v;el.classList.toggle("sel",on);el.setAttribute("aria-checked",on?"true":"false");el.tabIndex=on?0:-1;
+  });
+  $("pickBook").textContent="用「"+TICKET_NAME[v]+"」"+(S.booking?"修改預約":"預約");
+  $("bTicket").textContent=TICKET_NAME[v];
+}
+var tGroup=document.querySelector(".tickets");
+tGroup.addEventListener("click",function(e){var t=e.target.closest(".ticket[data-ticket]");if(t)pickTicket(t.dataset.ticket)});
+tGroup.addEventListener("keydown",function(e){
+  var t=e.target.closest(".ticket[data-ticket]");if(!t)return;
+  if(e.key===" "||e.key==="Enter"){e.preventDefault();pickTicket(t.dataset.ticket)}
+  else if(/^Arrow/.test(e.key)){e.preventDefault();var v=S.ticket==="100"?"200":"100";pickTicket(v);$("t"+v).focus()}
+});
+
+/* ---------- booking: business hours Mon–Fri 10–19, Sat 12–19, Sun closed; 90-min sessions ---------- */
+var WD="日一二三四五六",SESSION=60,CLOSE=19*60;
+function pad(n){return (n<10?"0":"")+n}
+function ymd(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+function hm(m){return pad(Math.floor(m/60))+":"+pad(m%60)}
+function parseYmd(v){var p=v.split("-");return new Date(+p[0],+p[1]-1,+p[2])}
+function sessions(d){var day=d.getDay();if(day===0)return [];var out=[];for(var m=(day===6?12:10)*60;m+SESSION<=CLOSE;m+=SESSION)out.push(m);return out}
+function nowMin(){var n=new Date();return n.getHours()*60+n.getMinutes()}
+function openDays(){
+  var res=[],t=new Date();
+  for(var i=0;res.length<12&&i<31;i++){
+    var d=new Date(t.getFullYear(),t.getMonth(),t.getDate()+i),ss=sessions(d);
+    if(!ss.length)continue;
+    if(i===0&&!ss.some(function(m){return m>nowMin()}))continue;
+    res.push(d);
+  }
+  return res;
+}
+function renderDates(){
+  var today=ymd(new Date());
+  $("bDates").innerHTML=openDays().map(function(d){var v=ymd(d);
+    return '<label class="pill"><input type="radio" name="bdate" value="'+v+'"><span><b>'+(d.getMonth()+1)+"/"+d.getDate()+'</b>'+(v===today?"今天":"週"+WD[d.getDay()])+'</span></label>'}).join("");
+  $("bSlots").innerHTML='<p class="small muted">請先選擇日期。</p>';
+}
+function renderSlots(v){
+  var isToday=v===ymd(new Date()),nm=nowMin();
+  $("bSlots").innerHTML=sessions(parseYmd(v)).map(function(m){var past=isToday&&m<=nm;
+    return '<label class="pill"><input type="radio" name="bslot" value="'+hm(m)+"–"+hm(m+SESSION)+'"'+(past?" disabled":"")+'><span><b>'+hm(m)+'</b>至 '+hm(m+SESSION)+'</span></label>'}).join("");
+}
+/* The form keeps what the visitor picked (S.draft) until they confirm; with no draft it shows the saved booking. */
+S.draft=null;
+$("bDates").addEventListener("change",function(e){if(e.target.name==="bdate"){S.draft={date:e.target.value,slot:null};renderSlots(e.target.value)}});
+$("bSlots").addEventListener("change",function(e){if(e.target.name==="bslot"){S.draft=S.draft||{date:null,slot:null};S.draft.slot=e.target.value}});
+function renderBooking(){
+  var p=load("pass");if(p&&p.name&&!$("bName").value)$("bName").value=p.name;
+  pickTicket(S.ticket);renderDates();$("bErr").hidden=true;
+  var keep=S.draft||(S.booking?{date:S.booking.date,slot:S.booking.slot}:null);
+  if(keep&&keep.date){
+    var dEl=document.querySelector('#bDates input[value="'+keep.date+'"]');
+    if(dEl){dEl.checked=true;renderSlots(keep.date);
+      if(keep.slot){var sEl=document.querySelector('#bSlots input[value="'+keep.slot+'"]');if(sEl&&!sEl.disabled)sEl.checked=true}}
+  }
+  $("bIntro").textContent=!S.booking?"完成預約後會產生報到 QR Code，可以存成圖片保存，到場時在入口出示。"
+    :bookingCurrent()?"你已經有一筆預約。修改日期或場次後按「確認預約」，通行證會跟著更新。"
+    :"你先前已有一筆預約，是依上一次的測驗結果。確認日期與場次後按「確認預約」，通行證會換成這次的代表色。";
+  show("book");
+}
+$("pickBook").addEventListener("click",function(){goto("book")});
+$("bBack").addEventListener("click",function(){back("result")});
+$("pBack").addEventListener("click",function(){if(S.booking)pickTicket(S.booking.ticket);S.draft=null;back("book")});
+$("bookForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  var name=$("bName").value.trim();
+  var dEl=document.querySelector('input[name="bdate"]:checked'),sEl=document.querySelector('input[name="bslot"]:checked');
+  var err=[];
+  if(!name)err.push("請填寫稱呼");
+  if(!dEl)err.push("請選擇到場日期");
+  if(!sEl)err.push("請選擇場次");
+  if(err.length){$("bErr").hidden=false;$("bErr").textContent=err.join("、")+"。";$("bErr").scrollIntoView({block:"center"});return}
+  $("bErr").hidden=true;
+  var d=parseYmd(dEl.value);
+  /* Same booking keeps its number; only the colour letter follows the latest result. */
+  var suffix=S.booking&&S.booking.code?S.booking.code.split("-").pop():Math.random().toString(36).slice(2,7).toUpperCase();
+  var code="CL-"+S.result.main.toUpperCase()+"-"+suffix;
+  S.booking={name:name,date:dEl.value,dateLabel:(d.getMonth()+1)+"/"+d.getDate()+"（週"+WD[d.getDay()]+"）",slot:sEl.value,ticket:S.ticket,code:code,color:S.result.main,rid:S.result.id};
+  S.draft=null;store("pass",S.booking);goto("pass");
+});
+function renderPass(){
+  var b=S.booking,c=C[b.color];setTone(b.color);
+  $("pColor").textContent=c.name+" · "+c.room;
+  $("pGuide").textContent=c.guide;
+  $("pName").textContent=b.name;
+  $("pTicket").textContent=b.ticket==="200"?"創作體驗票 NT$200（含拼貼工作坊）":"基本體驗票 NT$100";
+  $("pSlot").textContent=(b.dateLabel||b.date.replace(/-/g,"/"))+" "+b.slot;
+  $("pKw").textContent=c.kw.join("・");
+  $("pCode").textContent=b.code;
+  $("pMission").textContent=c.mission;
+  var qr=$("pQR");qr.innerHTML="";
+  var payload="COLORLAB|"+b.code+"|"+c.en+"|T"+b.ticket;
+  try{new QRCode(qr,{text:payload,width:116,height:116,colorDark:"#2B2533",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M})}
+  catch(e){qr.innerHTML='<span class="small" style="color:#2B2533">'+esc(b.code)+'</span>'}
+  $("shareBox2").hidden=true;$("passBox").hidden=true;
+  show("pass");preparePass();
+}
+$("pResult").addEventListener("click",function(){goto("result")});
+
+/* ---------- share card (1080x1920) ---------- */
+function cssVar(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+var LIGHT={b:"#3E6DB5",y:"#E2A23B",r:"#D2564B",p:"#8559B3"};
+function makeCard(){
+  var r=S.result,c=C[r.main];
+  var cv=document.createElement("canvas");cv.width=1080;cv.height=1920;var g=cv.getContext("2d");
+  g.fillStyle="#FBF6EE";g.fillRect(0,0,1080,1920);
+  function blob(x,y,rad,col,a){var gr=g.createRadialGradient(x,y,0,x,y,rad);gr.addColorStop(0,col+a);gr.addColorStop(1,col+"00");g.fillStyle=gr;g.fillRect(0,0,1080,1920)}
+  blob(150,260,620,LIGHT.b,"66");blob(980,220,520,LIGHT.y,"66");blob(960,1700,620,LIGHT.r,"55");blob(120,1760,640,LIGHT.p,"66");
+  blob(540,860,430,LIGHT[r.main],"cc");
+  g.textAlign="center";g.fillStyle="#2B2533";
+  g.font='500 30px "Cormorant Garamond", serif';g.fillText("T H E",540,200);
+  g.font='600 110px "Cormorant Garamond", serif';g.fillText("COLOR LAB",540,300);
+  g.font='600 44px "Noto Serif TC", serif';g.fillText("色 彩 情 緒 研 究 所",540,380);
+  g.font='italic 500 36px "Cormorant Garamond", serif';g.fillStyle="#A7834A";g.fillText("Turn Your Feelings Into Art.",540,450);
+  g.fillStyle="#2B2533";g.font='500 40px "Noto Sans TC", sans-serif';g.fillText("今天的我是",540,620);
+  var orb=g.createRadialGradient(500,820,10,540,860,230);orb.addColorStop(0,"#ffffffcc");orb.addColorStop(.6,LIGHT[r.main]);orb.addColorStop(1,LIGHT[r.main]);
+  g.fillStyle=orb;g.beginPath();g.arc(540,860,210,0,Math.PI*2);g.fill();
+  g.fillStyle="#ffffff";g.font='700 96px "Noto Serif TC", serif';g.fillText(c.name,540,895);
+  g.fillStyle="#2B2533";g.font='600 54px "Noto Serif TC", serif';g.fillText(c.room,540,1170);
+  g.font='500 46px "Noto Serif TC", serif';g.fillText(c.guide,540,1260);
+  g.font='400 34px "Noto Sans TC", sans-serif';g.fillStyle="#6A6072";g.fillText("情緒關鍵字："+c.kw.join("・"),540,1330);
+  var y=1430,x0=230,w=620;
+  ORDER.forEach(function(k){g.fillStyle="#2B2533";g.textAlign="left";g.font='400 30px "Noto Sans TC", sans-serif';g.fillText(C[k].name,x0-100,y+10);
+    g.fillStyle="#E3D8C8";g.fillRect(x0,y-8,w,20);g.fillStyle=LIGHT[k];g.fillRect(x0,y-8,w*r.pct[k]/100,20);
+    g.fillStyle="#6A6072";g.textAlign="right";g.font='400 28px "Noto Sans TC", sans-serif';g.fillText(r.pct[k]+"%",x0+w+90,y+10);y+=56});
+  g.textAlign="center";g.fillStyle="#2B2533";g.font='500 34px "Noto Sans TC", sans-serif';g.fillText("麗水書局｜集英樓二樓",540,1720);
+  g.fillStyle="#A7834A";g.font='400 28px "Noto Sans TC", sans-serif';g.fillText("#THECOLORLAB  #色彩情緒研究所  今天的你是什麼顏色？",540,1780);
+  return cv;
+}
+
+/* ---------- pass image (1080x1560) ---------- */
+function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+function wrapText(g,text,x,y,maxW,lh){var line="",n=0;for(var i=0;i<text.length;i++){var t=line+text[i];if(g.measureText(t).width>maxW&&line){g.fillText(line,x,y+n*lh);n++;line=text[i]}else line=t}if(line){g.fillText(line,x,y+n*lh);n++}return y+n*lh}
+function makePass(){
+  var b=S.booking,c=C[b.color],col=LIGHT[b.color];
+  var cv=document.createElement("canvas");cv.width=1080;cv.height=1560;var g=cv.getContext("2d");
+  g.fillStyle="#FBF6EE";g.fillRect(0,0,1080,1560);
+  var gr=g.createRadialGradient(880,180,0,880,180,760);gr.addColorStop(0,col+"80");gr.addColorStop(1,col+"00");g.fillStyle=gr;g.fillRect(0,0,1080,1560);
+  g.fillStyle="#FFFDF9";rr(g,60,60,960,1440,40);g.fill();g.strokeStyle="#E3D8C8";g.lineWidth=2;g.stroke();
+  var orb=g.createRadialGradient(860,190,8,890,220,96);orb.addColorStop(0,"#ffffffcc");orb.addColorStop(.6,col);orb.addColorStop(1,col);
+  g.fillStyle=orb;g.beginPath();g.arc(890,220,90,0,Math.PI*2);g.fill();
+  g.textAlign="left";g.fillStyle="#A7834A";g.font='500 28px "Noto Sans TC", sans-serif';g.fillText("THE COLOR LAB · 情緒通行證",120,160);
+  g.fillStyle=col;g.font='700 72px "Noto Serif TC", serif';g.fillText(c.name,120,260);
+  var w=g.measureText(c.name).width;g.fillStyle="#2B2533";g.font='600 52px "Noto Serif TC", serif';g.fillText(" · "+c.room,120+w,256);
+  g.font='500 36px "Noto Serif TC", serif';g.fillText(c.guide,120,330);
+  g.setLineDash([14,12]);g.strokeStyle="#E3D8C8";g.lineWidth=3;g.beginPath();g.moveTo(120,390);g.lineTo(960,390);g.stroke();g.setLineDash([]);
+  var rows=[["姓名",b.name],["票種",b.ticket==="200"?"創作體驗票 NT$200（含拼貼工作坊）":"基本體驗票 NT$100"],["場次",(b.dateLabel||b.date)+" "+b.slot],["關鍵字",c.kw.join("・")],["編號",b.code]];
+  var y=460;rows.forEach(function(r){g.fillStyle="#6A6072";g.font='400 30px "Noto Sans TC", sans-serif';g.fillText(r[0],120,y);g.fillStyle="#2B2533";g.font='500 34px "Noto Sans TC", sans-serif';g.fillText(r[1],270,y);y+=66});
+  g.fillStyle="#ffffff";rr(g,365,800,350,350,24);g.fill();g.strokeStyle="#E3D8C8";g.lineWidth=2;g.stroke();
+  var q=$("pQR").querySelector("canvas");
+  if(q){g.imageSmoothingEnabled=false;g.drawImage(q,390,825,300,300)}else{g.fillStyle="#2B2533";g.textAlign="center";g.font='600 40px "Cormorant Garamond", serif';g.fillText(b.code,540,985)}
+  g.textAlign="center";g.fillStyle="#6A6072";g.font='400 28px "Noto Sans TC", sans-serif';g.fillText("入口迎賓區出示此 QR Code 報到",540,1200);
+  g.textAlign="left";g.fillStyle="#2B2533";g.font='600 30px "Noto Sans TC", sans-serif';g.fillText("今日探索任務",120,1280);
+  g.font='400 30px "Noto Sans TC", sans-serif';g.fillStyle="#2B2533";var yy=wrapText(g,c.mission,120,1330,840,44);
+  g.fillStyle="#A7834A";g.font='400 26px "Noto Sans TC", sans-serif';g.fillText("附贈購書滿 $300 折 $50 優惠券 · 麗水書局｜集英樓二樓",120,Math.max(yy+20,1440));
+  return cv;
+}
+
+/* ---------- images: rendered on a canvas and shown as a picture to long-press or right-click save ---------- */
+function fontsReady(){
+  if(!(document.fonts&&document.fonts.load))return Promise.resolve();
+  return Promise.all([document.fonts.load('600 110px "Cormorant Garamond"'),document.fonts.load('700 96px "Noto Serif TC"'),document.fonts.load('400 30px "Noto Sans TC"')]).catch(function(){});
+}
+function reveal(boxId){$(boxId).hidden=false;$(boxId).scrollIntoView({behavior:"smooth",block:"center"})}
+function share(imgId,boxId){
+  fontsReady().then(function(){try{$(imgId).src=makeCard().toDataURL("image/png");reveal(boxId)}catch(e){}});
+}
+$("toShare").addEventListener("click",function(){share("shareImg","shareBox")});
+$("pShare").addEventListener("click",function(){share("shareImg2","shareBox2")});
+/* The pass picture is drawn as soon as the pass page opens (after the QR code exists),
+   so 製作通行證圖片 can show it straight away. */
+var passReady=null;
+function preparePass(){passReady=fontsReady().then(function(){try{$("passImg").src=makePass().toDataURL("image/png")}catch(e){}})}
+$("dlPass").addEventListener("click",function(){(passReady||Promise.resolve()).then(function(){reveal("passBox")})});
+
+/* ---------- navigation ----------
+   Page order: home → quiz → result → book → pass. Each view has its own #hash, so the
+   browser / phone back gesture and every in-page "回上一頁" step through the same history. */
+/* Each history entry is tagged with its position (history.state.cl), so a back/forward traversal is
+   told apart from a new page: stack[pos] is the current view, stack[pos-1] the one before it. */
+var VIEWS=["home","quiz","result","book","pass"],stack=[],pos=0,current=null,silent=false,replacing=false,canTag=true;
+try{history.scrollRestoration="manual"}catch(e){}
+function tag(n){try{history.replaceState({cl:n},"")}catch(e){canTag=false}}
+function entryPos(){var s=history.state;return s&&typeof s.cl==="number"?s.cl:null}
+function viewFromHash(){var h=(location.hash||"").slice(1);return VIEWS.indexOf(h)>-1?h:"home"}
+function goto(v){if(v===viewFromHash()){route(v);return}location.hash=v}
+function back(expected){
+  if(canTag&&pos>0&&stack[pos-1]===expected){history.back();return}
+  if(expected===viewFromHash()){route(expected);return}
+  replacing=true;location.replace("#"+expected);
+}
+window.addEventListener("hashchange",function(){
+  if(silent){silent=false;tag(pos);return}
+  var v=viewFromHash(),n=entryPos();
+  if(replacing){replacing=false;stack[pos]=v;tag(pos)}
+  else if(n===null){pos+=1;stack.length=pos;stack[pos]=v;tag(pos)}
+  else{pos=n;stack[pos]=v}
+  route(v);
+});
+function route(v){
+  var prev=current;
+  if(v==="quiz"&&!(S.answers&&S.answers.length))v="home";
+  if((v==="result"||v==="book")&&!S.result)v="home";
+  if(v==="pass"&&!bookingCurrent())v=S.result?"result":"home";
+  if(v!==viewFromHash()){silent=true;location.replace("#"+v);stack[pos]=v}
+  current=v;
+  if(v==="home"){setTone(null);$("resume").hidden=!S.result;show("home")}
+  else if(v==="quiz"){setTone(null);show("quiz");renderQ()}
+  else if(v==="result"){renderResult();if(prev==="book"){var pl=$("plans");if(pl)pl.scrollIntoView({block:"start"})}}
+  else if(v==="book")renderBooking();
+  else renderPass();
+}
+
+/* ---------- boot ---------- */
+var saved=load("result");
+if(saved&&saved.main&&C[saved.main])S.result=saved;
+var savedPass=load("pass");
+if(S.result&&savedPass&&savedPass.code&&C[savedPass.color]&&savedPass.date&&savedPass.slot){S.booking=savedPass;S.ticket=savedPass.ticket||S.ticket}
+var v0=viewFromHash();pos=entryPos()||0;stack=[];stack[pos]=v0;tag(pos);route(v0);
+})();
+</script>
+
+</body>
+</html>
