@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>THE COLOR LAB 情緒色彩測驗</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="THE COLOR LAB 色彩情緒研究所｜今天的你是什麼顏色？10 題、約 2 分鐘，找到你的情緒代表色，預約並領取情緒通行證。">
+<meta name="description" content="THE COLOR LAB 色彩情緒研究所｜2026/12/1–12/31 麗水書局。今天的你是什麼顏色？10 題、約 2 分鐘，找到你的情緒代表色，預約並領取情緒通行證。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;600;700&display=swap">
@@ -163,6 +163,13 @@ p{margin:0}
 .picked b{font-weight:600}
 .pills{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}
 .pills.slots{grid-template-columns:repeat(auto-fill,minmax(124px,1fr))}
+.cal{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.cal-month{grid-column:1/-1;font-size:15px;font-weight:600;color:var(--ink);margin:2px 0}
+.cal-wd{text-align:center;font-size:12px;color:var(--ink-soft)}
+.cal .pill span{padding:8px 2px;min-height:48px;align-content:center}
+.cal .pill span small{font-size:11px;line-height:1.2}
+.cal .pill input:disabled+span{text-decoration:none;opacity:.32}
+.cal-end{grid-column:1/-1}
 .pill{position:relative;cursor:pointer}
 .pill input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
 .pill span{display:grid;justify-items:center;padding:9px 6px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:13px;line-height:1.45;color:var(--ink-soft);transition:background .15s,border-color .15s}
@@ -238,6 +245,7 @@ footer{text-align:center;font-size:12px;color:var(--ink-soft);display:grid;gap:4
       <span class="eyebrow">Turn Your Feelings Into Art.</span>
       <h1 class="brand"><small>THE</small>COLOR LAB</h1>
       <div class="brand-zh">色彩情緒研究所</div>
+      <p class="muted small">活動期間 2026/12/1（二）至 12/31（四）・週日公休</p>
       <p class="q">今天的你是什麼顏色？</p>
       <p class="muted">每一種情緒，都值得被看見。</p>
       <div class="chips" aria-label="四種情緒代表色">
@@ -255,7 +263,7 @@ footer{text-align:center;font-size:12px;color:var(--ink-soft);display:grid;gap:4
       <h2>先做測驗，再帶著你的顏色走進書店</h2>
       <ol class="steps">
         <li><div><b>線上測驗</b><br><span class="muted small">回答 10 題（8 個生活情境、2 題自評），得到今天的情緒代表色、對應的色彩空間與選書方向。</span></div></li>
-        <li><div><b>預約取得報到 QR Code</b><br><span class="muted small">選擇 NT$100 基本體驗票或 NT$200 創作體驗票（含拼貼工作坊，採預約制）。</span></div></li>
+        <li><div><b>預約取得報到 QR Code</b><br><span class="muted small">選擇 NT$100 基本體驗票或 NT$200 創作體驗票（含拼貼工作坊），再選到場日期與場次。每場 60 分鐘、限 24 人。</span></div></li>
         <li><div><b>現場領取「情緒通行證」</b><br><span class="muted small">入口掃碼報到，領取印有你的代表色、情緒關鍵字與探索任務的通行證，開始五大體驗區。</span></div></li>
       </ol>
       <p class="note">這是一個情緒探索的小遊戲，用來陪你整理「今天想要什麼樣的感受」，不是心理診斷，也不是固定的人格分類。到了現場，你可以自由走進四個色彩空間，選出真正有共鳴的那一色。</p>
@@ -357,7 +365,8 @@ footer{text-align:center;font-size:12px;color:var(--ink-soft);display:grid;gap:4
         <details><summary>我完全沒有畫畫或藝術基礎，可以參加嗎？</summary><div>可以。拼貼工作坊用的是色紙、雜誌剪報、貼紙和印章，不需要畫畫。工作人員會先說明材料用法，再一步步引導你完成，流程見上方「情緒拼貼工作坊怎麼進行」。</div></details>
         <details><summary>做好的作品一定要公開展示嗎？</summary><div>不一定。完成後可以自己決定帶回家、貼上現場的「我們的情緒美術館」展牆，或上傳到線上數位美術館。上傳一定要經過你本人同意才會公開。</div></details>
         <details><summary>測驗結果是藍色，就只能去藍色空間嗎？</summary><div>不是。四個色彩空間都可以自由進出。各空間設有簡單的情緒問題，你可以掃描通行證上的 QR Code 記錄感受，最後比較線上測驗和現場最有共鳴的顏色是否一致。</div></details>
-        <details><summary>現場要怎麼報到？需要多久？</summary><div>出示預約後拿到的 QR Code，在入口迎賓區掃碼，就能領取對應你代表色的情緒通行證。入口設有活動流程與各區導覽資訊。每個場次 60 分鐘。</div></details>
+        <details><summary>現場要怎麼報到？需要多久？</summary><div>出示預約後拿到的 QR Code，在入口迎賓區掃碼，就能領取對應你代表色的情緒通行證。入口設有活動流程與各區導覽資訊。每個場次 60 分鐘、限 24 人。</div></details>
+        <details><summary>活動什麼時候？一天有幾個場次？</summary><div>活動期間是 2026/12/1（二）至 12/31（四），週日公休。<br>週一至週五 10:00–19:00，每天 9 場；週六 12:00–19:00，每天 7 場。<br>每場 60 分鐘、限 24 人，請先線上預約。</div></details>
         <details><summary>留言牆會公開我的名字嗎？</summary><div>留言是自願的，並提供匿名展示選項，由你決定要分享多少。</div></details>
         <details><summary>活動地點在哪裡？</summary><div>麗水書局，位於政治大學集英樓 2 樓。<br>地址：<span class="addr">116臺北市文山區萬興里指南路二段64號集英樓政治大學2樓</span><br><a href="https://maps.app.goo.gl/JZEh72cvS6vcDxKUA" target="_blank" rel="noopener">在 Google 地圖開啟</a></div></details>
       </div>
@@ -387,7 +396,7 @@ footer{text-align:center;font-size:12px;color:var(--ink-soft);display:grid;gap:4
           <span class="label">創作體驗票</span>
           <div class="price">NT$200<small>/ 人</small></div>
           <dl class="fab"><dt>特色</dt><dd>基本體驗票全部內容，加上情緒拼貼工作坊、全部創作材料與工作人員引導</dd><dt>優勢</dt><dd>用色紙、剪報與貼紙拼貼，不必會畫畫，三個階段就能完成</dd><dt>利益</dt><dd>把今天的感受變成一張專屬的 A6 情緒拼貼卡，可帶回、上展牆或參加線上票選</dd></dl>
-          <p class="small muted">工作坊涉及材料與現場人力，名額有限，採線上預約。</p>
+          <p class="small muted">每場工作坊限 24 人，需要材料與現場人力，請先線上預約。</p>
           <div class="pickrow"><i></i><span class="off">點選此方案</span><span class="on">已選擇此方案</span></div>
         </div>
       </div>
@@ -411,11 +420,11 @@ footer{text-align:center;font-size:12px;color:var(--ink-soft);display:grid;gap:4
         <div class="picked"><b id="bTicket">創作體驗票 NT$200</b><span class="small muted">要更換票種，請按「回上一頁」重新選擇。</span></div>
       </div>
       <div class="field"><span class="flabel" id="bDatesLabel">到場日期</span>
-        <p class="small muted">營業時間：週一至週五 10:00–19:00、週六 12:00–19:00，週日公休。</p>
-        <div class="pills" id="bDates" role="radiogroup" aria-labelledby="bDatesLabel"></div>
+        <p class="small muted">活動期間 2026/12/1（二）至 12/31（四）。營業時間：週一至週五 10:00–19:00、週六 12:00–19:00，週日公休。</p>
+        <div class="cal" id="bDates" role="radiogroup" aria-labelledby="bDatesLabel"></div>
       </div>
       <div class="field"><span class="flabel" id="bSlotsLabel">場次</span>
-        <p class="small muted">每場 60 分鐘，最後一場在 19:00 閉店前結束。</p>
+        <p class="small muted">每場 60 分鐘、限 24 人。週一至週五每天 9 場，週六 7 場，最後一場在 19:00 閉店前結束。</p>
         <div class="pills slots" id="bSlots" role="radiogroup" aria-labelledby="bSlotsLabel"></div>
       </div>
       <p class="err" id="bErr" hidden></p>
@@ -470,7 +479,7 @@ footer{text-align:center;font-size:12px;color:var(--ink-soft);display:grid;gap:4
   </main>
 
   <footer>
-    <span>THE COLOR LAB 色彩情緒研究所 · 麗水書局｜集英樓二樓</span>
+    <span>THE COLOR LAB 色彩情緒研究所 · 2026/12/1–12/31 · 麗水書局｜集英樓二樓</span>
     <span>本測驗為活動情緒探索工具，非心理診斷或人格分類。</span>
   </footer>
 </div>
@@ -660,28 +669,35 @@ tGroup.addEventListener("keydown",function(e){
 });
 
 /* ---------- booking: business hours Mon–Fri 10–19, Sat 12–19, Sun closed; 90-min sessions ---------- */
-var WD="日一二三四五六",SESSION=60,CLOSE=19*60;
+/* Event: 2026/12/1 (Tue) to 12/31 (Thu). Mon–Fri 10:00–19:00 = 9 sessions, Sat 12:00–19:00 = 7, Sun closed; 24 people a session. */
+var WD="日一二三四五六",SESSION=60,CLOSE=19*60,CAP=24,EV_START=new Date(2026,11,1),EV_END=new Date(2026,11,31);
 function pad(n){return (n<10?"0":"")+n}
 function ymd(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
 function hm(m){return pad(Math.floor(m/60))+":"+pad(m%60)}
 function parseYmd(v){var p=v.split("-");return new Date(+p[0],+p[1]-1,+p[2])}
 function sessions(d){var day=d.getDay();if(day===0)return [];var out=[];for(var m=(day===6?12:10)*60;m+SESSION<=CLOSE;m+=SESSION)out.push(m);return out}
 function nowMin(){var n=new Date();return n.getHours()*60+n.getMinutes()}
-function openDays(){
-  var res=[],t=new Date();
-  for(var i=0;res.length<12&&i<31;i++){
-    var d=new Date(t.getFullYear(),t.getMonth(),t.getDate()+i),ss=sessions(d);
-    if(!ss.length)continue;
-    if(i===0&&!ss.some(function(m){return m>nowMin()}))continue;
-    res.push(d);
+/* Every open day of the event; a day can be booked until its last session has started. */
+function eventDays(){
+  var out=[],t0=new Date(),nm=nowMin();t0.setHours(0,0,0,0);
+  for(var d=new Date(EV_START);d<=EV_END;d=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1)){
+    var ss=sessions(d);if(!ss.length)continue;
+    var open=d>t0||(d.getTime()===t0.getTime()&&ss.some(function(m){return m>nm}));
+    out.push({d:d,open:open});
   }
-  return res;
+  return out;
 }
 function renderDates(){
-  var today=ymd(new Date());
-  $("bDates").innerHTML=openDays().map(function(d){var v=ymd(d);
-    return '<label class="pill"><input type="radio" name="bdate" value="'+v+'"><span><b>'+(d.getMonth()+1)+"/"+d.getDate()+'</b>'+(v===today?"今天":"週"+WD[d.getDay()])+'</span></label>'}).join("");
+  var days=eventDays(),today=ymd(new Date());
   $("bSlots").innerHTML='<p class="small muted">請先選擇日期。</p>';
+  if(!days.some(function(x){return x.open})){
+    $("bDates").innerHTML='<p class="small muted cal-end">活動已在 2026/12/31 結束，謝謝你的關注。</p>';$("bSlots").innerHTML="";return;
+  }
+  var html='<span class="cal-month">2026 年 12 月</span>'+"一二三四五六".split("").map(function(w){return '<span class="cal-wd" aria-hidden="true">'+w+'</span>'}).join("");
+  for(var i=(days[0].d.getDay()+6)%7;i>0;i--)html+='<span aria-hidden="true"></span>';
+  html+=days.map(function(x){var d=x.d,v=ymd(d),lab=(d.getMonth()+1)+"月"+d.getDate()+"日 週"+WD[d.getDay()];
+    return '<label class="pill"><input type="radio" name="bdate" value="'+v+'" aria-label="'+lab+(x.open?"":"（已過）")+'"'+(x.open?"":" disabled")+'><span><b>'+d.getDate()+'</b>'+(v===today?"<small>今天</small>":"")+'</span></label>'}).join("");
+  $("bDates").innerHTML=html;
 }
 function renderSlots(v){
   var isToday=v===ymd(new Date()),nm=nowMin();
@@ -698,7 +714,7 @@ function renderBooking(){
   var keep=S.draft||(S.booking?{date:S.booking.date,slot:S.booking.slot}:null);
   if(keep&&keep.date){
     var dEl=document.querySelector('#bDates input[value="'+keep.date+'"]');
-    if(dEl){dEl.checked=true;renderSlots(keep.date);
+    if(dEl&&!dEl.disabled){dEl.checked=true;renderSlots(keep.date);
       if(keep.slot){var sEl=document.querySelector('#bSlots input[value="'+keep.slot+'"]');if(sEl&&!sEl.disabled)sEl.checked=true}}
   }
   $("bIntro").textContent=!S.booking?"完成預約後會產生報到 QR Code，可以存成圖片保存，到場時在入口出示。"
@@ -771,7 +787,7 @@ function makeCard(){
   ORDER.forEach(function(k){g.fillStyle="#2B2533";g.textAlign="left";g.font='400 30px "Noto Sans TC", sans-serif';g.fillText(C[k].name,x0-100,y+10);
     g.fillStyle="#E3D8C8";g.fillRect(x0,y-8,w,20);g.fillStyle=LIGHT[k];g.fillRect(x0,y-8,w*r.pct[k]/100,20);
     g.fillStyle="#6A6072";g.textAlign="right";g.font='400 28px "Noto Sans TC", sans-serif';g.fillText(r.pct[k]+"%",x0+w+90,y+10);y+=56});
-  g.textAlign="center";g.fillStyle="#2B2533";g.font='500 34px "Noto Sans TC", sans-serif';g.fillText("麗水書局｜集英樓二樓",540,1720);
+  g.textAlign="center";g.fillStyle="#2B2533";g.font='500 34px "Noto Sans TC", sans-serif';g.fillText("2026.12.1 – 12.31 · 麗水書局｜集英樓二樓",540,1720);
   g.fillStyle="#A7834A";g.font='400 28px "Noto Sans TC", sans-serif';g.fillText("#THECOLORLAB  #色彩情緒研究所  今天的你是什麼顏色？",540,1780);
   return cv;
 }
